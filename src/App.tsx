@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
+import { BottomNav } from './components/BottomNav';
 import { DashboardView } from './components/views/DashboardView';
 import { AgentWorkspaceView } from './components/views/AgentWorkspaceView';
 import { ApprovalsView } from './components/views/ApprovalsView';
@@ -36,6 +37,7 @@ export default function App() {
   
   const [isAwsModalOpen, setIsAwsModalOpen] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Load initial data from api service
   const loadData = async () => {
@@ -95,12 +97,14 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white font-sans antialiased">
-      {/* Persistent Left Sidebar */}
+      {/* Sidebar: Responsive Drawer on Mobile/Tablet, Persistent on Desktop */}
       <Sidebar
         activeView={activeView}
         setActiveView={setActiveView}
         pendingApprovalsCount={pendingApprovalsCount}
         onOpenAwsInfo={() => setIsAwsModalOpen(true)}
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Main Workspace Container */}
@@ -113,9 +117,10 @@ export default function App() {
           onOpenDemoInfo={() => setIsDemoModalOpen(true)}
           onOpenAwsInfo={() => setIsAwsModalOpen(true)}
           pendingApprovalsCount={pendingApprovalsCount}
+          onToggleSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
         />
 
-        <main className="flex-1 overflow-y-auto pb-16">
+        <main className="flex-1 overflow-y-auto pb-24 lg:pb-16">
           {activeView === 'dashboard' && (
             <DashboardView
               agentStatus={agentStatus}
@@ -176,6 +181,14 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Mobile Bottom Quick Navigation Bar */}
+      <BottomNav
+        activeView={activeView}
+        setActiveView={setActiveView}
+        pendingApprovalsCount={pendingApprovalsCount}
+        onOpenSidebar={() => setIsMobileSidebarOpen(true)}
+      />
 
       {/* Modal Dialogs */}
       <AwsStackModal
