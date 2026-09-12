@@ -10,6 +10,17 @@ import hashlib
 from datetime import datetime
 from typing import Dict, Any, Optional
 
+# Strands Agents Tool Decorator
+try:
+    from strands import tool
+except ImportError:
+    try:
+        from strands_agents import tool
+    except ImportError:
+        def tool(func):
+            """Fallback no-op decorator if Strands SDK is not installed locally."""
+            return func
+
 # AWS SDK
 import boto3
 from botocore.exceptions import ClientError
@@ -45,6 +56,7 @@ def sanitize_untrusted_input(text: str) -> str:
     return f"<untrusted_external_data>\n{cleaned}\n</untrusted_external_data>"
 
 
+@tool
 def get_customer(customer_id: str) -> Dict[str, Any]:
     """
     Retrieve customer operational profile, tier, dispute history, and lifetime orders.
@@ -62,6 +74,7 @@ def get_customer(customer_id: str) -> Dict[str, Any]:
         return {'status': 'error', 'message': f'DynamoDB query failed: {str(e)}'}
 
 
+@tool
 def get_order(order_id: str) -> Dict[str, Any]:
     """
     Retrieve order details, delivery dates, items purchased, and tracking status.
@@ -79,6 +92,7 @@ def get_order(order_id: str) -> Dict[str, Any]:
         return {'status': 'error', 'message': f'DynamoDB query failed: {str(e)}'}
 
 
+@tool
 def search_business_policy(policy_topic: str) -> Dict[str, Any]:
     """
     Search business standard operating procedures (SOPs) and return/warranty rules.
@@ -111,6 +125,7 @@ def search_business_policy(policy_topic: str) -> Dict[str, Any]:
     return {'status': 'success', 'policy': matched}
 
 
+@tool
 def analyze_document(s3_key: str) -> Dict[str, Any]:
     """
     Perform multimodal inspection of uploaded receipt, photo, or invoice via Amazon Bedrock.
@@ -131,6 +146,7 @@ def analyze_document(s3_key: str) -> Dict[str, Any]:
         return {'status': 'error', 'message': str(e)}
 
 
+@tool
 def send_email(recipient: str, subject: str, body_text: str, requires_review: bool = False) -> Dict[str, Any]:
     """
     Send authorized outbound operational email via Amazon SES.
@@ -154,6 +170,7 @@ def send_email(recipient: str, subject: str, body_text: str, requires_review: bo
         return {'status': 'error', 'message': str(e)}
 
 
+@tool
 def issue_refund(customer_id: str, order_id: str, amount: float, reason: str) -> Dict[str, Any]:
     """
     Issue financial refund to customer original payment method.
@@ -198,6 +215,7 @@ def issue_refund(customer_id: str, order_id: str, amount: float, reason: str) ->
     }
 
 
+@tool
 def create_followup_task(title: str, description: str, priority: str = 'Medium', assignee: str = 'OpsPilot Agent') -> Dict[str, Any]:
     """
     Create a structured task in OpsPilot Task Queue.
@@ -225,6 +243,7 @@ def create_followup_task(title: str, description: str, priority: str = 'Medium',
         return {'status': 'error', 'message': str(e)}
 
 
+@tool
 def record_audit_event(action: str, tool_name: str, reason: str, result: str, risk_level: str = 'LOW') -> Dict[str, Any]:
     """
     Record an immutable cryptographically sequenced event to DynamoDB audit ledger.
