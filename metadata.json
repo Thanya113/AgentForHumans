@@ -1,0 +1,6 @@
+{
+  "name": "OpsPilot AI",
+  "description": "Autonomous AI operations agent for small businesses handling customer requests, policy checks, approvals, tasks, and audit logs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
