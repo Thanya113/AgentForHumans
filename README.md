@@ -38,6 +38,8 @@ Most AI agent frameworks are either generic conversational chatbots that cannot 
 
 OpsPilot AI is architected natively for Amazon Web Services using the **Strands Agents SDK** and **Amazon Bedrock**:
 
+![OpsPilot AI Cloud Architecture](architecture_diagram.jpg)
+
 ### Mermaid Architecture Diagram
 
 ```mermaid
