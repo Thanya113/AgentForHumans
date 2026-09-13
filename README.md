@@ -223,7 +223,13 @@ VITE_API_GATEWAY_URL=https://a1b2c3d4.execute-api.us-east-1.amazonaws.com
 npm install
 npm run dev
 ```
-Open your browser at `http://localhost:3000` to access the OpsPilot AI Operations Dashboard.
+### Quickstart: Running Locally Without AWS (Demo Mode)
+OpsPilot AI works 100% out of the box without requiring AWS credentials or cloud infrastructure:
+```bash
+npm install
+npm run dev
+```
+Open `http://localhost:3000` to test all 10 views, the 9-stage Strands pipeline, human approvals, and cryptographic audit logging in high-fidelity Demo Mode!
 
 ---
 
@@ -235,6 +241,7 @@ Open your browser at `http://localhost:3000` to access the OpsPilot AI Operation
 ├── package.json                   # React 19 / TypeScript / Vite dependencies
 ├── vite.config.ts                 # Vite bundler configuration
 ├── aws/
+│   ├── test_aws_connection.py     # AWS Account & Bedrock Readiness Checker
 │   ├── strands_agent/
 │   │   ├── agent.py               # Strands Agent definition with Bedrock model
 │   │   ├── tools.py               # 8 Custom business tools with DynamoDB/S3/SES
@@ -247,8 +254,9 @@ Open your browser at `http://localhost:3000` to access the OpsPilot AI Operation
 │   └── API_CONTRACT.md            # Detailed REST API specification
 ├── src/
 │   ├── components/
-│   │   ├── Sidebar.tsx            # Navigation sidebar with pending counts
-│   │   ├── TopBar.tsx             # Global search, agent status, and mode switcher
+│   │   ├── BottomNav.tsx          # Mobile bottom navigation bar
+│   │   ├── Sidebar.tsx            # Responsive navigation drawer (mobile & desktop)
+│   │   ├── TopBar.tsx             # Responsive global search, status, and hamburger menu
 │   │   ├── modals/                # Architecture overview & demo mode modals
 │   │   └── views/
 │   │       ├── DashboardView.tsx       # KPI summaries and rapid launch
